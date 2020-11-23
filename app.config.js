@@ -1,4 +1,6 @@
-{
+import 'dotenv/config'
+
+export default {
   "expo": {
     "name": "coffeenut",
     "slug": "coffeenut",
@@ -27,6 +29,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "yelpApiKey": process.env.YELP_API_KEY
     }
   }
 }
