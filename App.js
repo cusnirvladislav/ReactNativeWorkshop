@@ -1,73 +1,45 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView, PanResponder } from 'react-native';
-import Constants from 'expo-constants';
-import axios from 'axios'
-import { ListItem, Avatar } from 'react-native-elements'
-import fakeCoffeeShops from './fixtures'
-import Deck from './Deck'
+import React, {useEffect, useState, useRef} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity, SafeAreaView, PanResponder} from 'react-native';
+import DeckScreen from './screens/Deck'
+import TestScreen from './screens/Test'
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-// console.log('fakeCoffeeShops', fakeCoffeeShops)
+const Tab = createBottomTabNavigator();
 
-const SEARCH_URL = '/businesses/search';
+const App = () => {
+    return (
+        <SafeAreaProvider>
+            <NavigationContainer>
+                <Tab.Navigator
+                    screenOptions={({route}) => ({
+                        tabBarIcon: ({focused, color, size}) => {
+                            let iconName;
 
-const api = axios.create({
-  baseURL: 'https://api.yelp.com/v3',
-  headers: {
-    Authorization: `Bearer ${Constants.manifest.extra.yelpApiKey}`
-  }
-})
+                            if (route.name === 'Home') {
+                                iconName = focused
+                                    ? 'ios-information-circle'
+                                    : 'ios-information-circle-outline';
+                            } else if (route.name === 'Test') {
+                                iconName = focused ? 'ios-list-box' : 'ios-list';
+                            }
 
-const currentLocation = {
-  latitude: '37.786882',
-  longitude: '-122.399972'
+                            // You can return any component that you like here!
+                            return <Ionicons name={iconName} size={size} color={color}/>;
+                        },
+                    })}
+                    tabBarOptions={{
+                        activeTintColor: 'red',
+                        inactiveTintColor: 'gray',
+                    }}>
+                    <Tab.Screen name="Home" component={DeckScreen}/>
+                    <Tab.Screen name="Test" component={TestScreen}/>
+                </Tab.Navigator>
+            </NavigationContainer>
+        </SafeAreaProvider>
+    )
 }
 
-export default function App() {
-  const [data, setData] = useState([]);
-
-  useEffect(()=>{
-      const fetchData = async () => {
-         const result = await api.get(SEARCH_URL, {
-           params: {
-             categories: 'coffee, coffeeroasteries, coffeeshop',
-             ...currentLocation
-           }
-         })
-
-         setData(result.data.businesses)
-      }
-      fetchData()
-  },[]);
-
-  const listItem = ({ item }) => (
-    <ListItem key={item.id} bottomDivider>
-    <Avatar source={{uri: item.image_url}} />
-    <ListItem.Title>{item.name}</ListItem.Title>
-    {/* <ListItem.Content>
-      <ListItem.Title>{item.name}</ListItem.Title>
-      <ListItem.Subtitle>{item.name}</ListItem.Subtitle>
-    </ListItem.Content> */}
-  </ListItem>
-  )
-
-  return (
-    // <SafeAreaView style={styles.container}>
-    //   <FlatList
-    //     keyExtractor={(item)=>item.id}
-    //     data={fakeCoffeeShops}
-    //     renderItem={listItem}
-    //   />
-    // </SafeAreaView>
-
-    <Deck data={data} onSwipeRight={()=> {}} onSwipeLeft={()=> {}} /> 
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { StyleSheet, Text, View, Animated, PanResponder, Dimensions } from 'react-native';
-import CoffeeShop from './CoffeeShop'
+import CoffeeShop from '../CoffeeShop'
 
 const SCREEN_WIDTH = Dimensions.get('window').width 
 const SWIPE_THRESHOLD = 125;
 const DURATION = 500;
 
-  const Deck = ({ data, onSwipeRight, onSwipeLeft }) => {
+  const Cards = ({ data, onSwipeRight, onSwipeLeft }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const position = useRef(new Animated.ValueXY()).current
 
@@ -79,17 +79,17 @@ const DURATION = 500;
                 return null;
             }  else if (index === currentIndex) {
                 return (
-                    <Animated.View style={getCardStyle()} {...panResponder.panHandlers}>
+                    <Animated.View key={index} style={getCardStyle()} {...panResponder.panHandlers}>
                         <CoffeeShop item={item} />
                     </Animated.View>
                 )
-            } else return <CoffeeShop item={item} />
+            } else return <CoffeeShop key={index} item={item} />
           })}
        </>
       )
   }
 
-  export default Deck;
+  export default Cards;
 
   const styles = StyleSheet.create({
     container: {
