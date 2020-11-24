@@ -90,10 +90,3 @@ const DURATION = 500;
   }
 
   export default Cards;
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
-  });
