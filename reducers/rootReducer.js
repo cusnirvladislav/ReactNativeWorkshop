@@ -1,4 +1,5 @@
 import * as types from '../actions/types'
+import {REHYDRATE} from "redux-persist";
 
 const initialState = {
     loading: false,
@@ -8,6 +9,11 @@ const initialState = {
 
 export default (state=initialState, action) => {
     switch (action.type){
+        case REHYDRATE:
+            return {
+                ...state,
+                coffeeshops: action.payload
+            } || state
         case types.REQUEST_COFFEESHOPS:
             return {
                 ...state,

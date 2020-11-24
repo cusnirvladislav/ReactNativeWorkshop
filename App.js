@@ -1,7 +1,9 @@
 import React from 'react';
 import Navigation from "./Navigation";
 import {Provider} from 'react-redux'
-import store from "./components/store";
+import createStore from "./components/store";
+
+const {store} = createStore();
 
 const App = () => {
     return (
